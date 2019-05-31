@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta charset="utf-8" name="viewport"
+		content="width=device-width, initial-scale=1"
+		http-equiv="X-UA-Conpatible" />
+	<title>Alumnos</title>
+</h:head>
+<h:body>
+	<p:growl id="msj" showDetail="true" />
+	<h:form>
+		<p:panel id="formAlumno" header="Formulario para Alumnos"
+			style="width:700px;">
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Codigo Usuario" />
+				<h:inputText size="10" disabled="true"
+					value="#{alumnos.alumno.codAlumno}" />
+			</h:panelGrid>
+			<h:panelGrid columns="4">
+				<h:outputLabel value="Nombre" />
+				<h:inputText id="txtNombre" value="#{alumnos.alumno.nombre}"
+					required="true" />
+				<h:outputLabel value="Apellido" />
+				<h:inputText id="txtApellido" value="#{alumnos.alumno.apellido}"
+					required="true" />
+
+				<h:outputLabel value="Fecha Nacimiento:" />
+				<p:calendar size="6" id="txtFNacimiento" mask="true"
+					value="#{alumnos.fecha}" required="true" pattern="dd/MM/yyyy" />
+				<h:outputLabel value="Sexo" />
+				<h:selectOneMenu value="#{alumnos.alumno.sexo}" required="true">
+					<f:selectItem itemLabel="Seleccione Sexo"></f:selectItem>
+					<f:selectItem itemLabel="Masculino" itemValue="M"></f:selectItem>
+					<f:selectItem itemLabel="Femenino" itemValue="F"></f:selectItem>
+				</h:selectOneMenu>
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Direccion" />
+				<h:inputText size="50" id="txtDireccion"
+					value="#{alumnos.alumno.direccion}" required="true" />
+
+				<h:commandButton value="Guardar" action="#{alumnos.registrar}"
+					update=":msj" />
+				<h:commandButton value="Cancelar" />
+
+			</h:panelGrid>
+
+
+
+		</p:panel>
+	</h:form>
+	<p:dataTable var="alumno" value="#{alumnos.alumnos}" rows="10"
+		paginator="true">
+		<p:column headerText="Cod Alumno">
+			<h:outputText value="#{alumno.codAlumno}" />
+		</p:column>
+
+		<p:column headerText="Nombre">
+			<h:outputText value="#{alumno.nombre}" />
+		</p:column>
+
+		<p:column headerText="Apellido">
+			<h:outputText value="#{alumno.apellido}" />
+		</p:column>
+
+		<p:column headerText="Direccion">
+			<h:outputText value="#{alumno.direccion}" />
+		</p:column>
+		<p:column headerText="Fecha Nacimiento">
+			<h:outputText value="#{alumno.fechaNacimiento}" />
+		</p:column>
+		<p:column headerText="Sexo">
+			<h:outputText value="Masculino" rendered="#{alumno.sexo == 'M'}" />
+			<h:outputText value="Femenino" rendered="#{alumno.sexo == 'F'}" />
+		</p:column>
+	</p:dataTable>
+
+</h:body>
+</html>
