@@ -1,4 +1,5 @@
 ----CULERO MARICA
+-----Gay
 CREATE DATABASE Escuela
 
 USE Escuela
