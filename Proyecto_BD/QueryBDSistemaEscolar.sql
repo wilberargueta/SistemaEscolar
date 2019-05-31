@@ -1,3 +1,4 @@
+----CULERO MARICA
 CREATE DATABASE Escuela
 
 USE Escuela
@@ -46,7 +47,7 @@ CREATE TABLE Rol_Personal(
 	Id_Rol_Personal INT NOT NULL IDENTITY(1,1),
 	Id_Rol INT NOT NULL UNIQUE,
 	Cod_Personal CHAR(10) NOT NULL UNIQUE,
-	Contraseña VARCHAR(12) NOT NULL,
+	Contraseï¿½a VARCHAR(12) NOT NULL,
 	CONSTRAINT pk_rol_personal PRIMARY KEY(Id_Rol_Personal),
 	CONSTRAINT fk_rol_personal_To_rol FOREIGN KEY(Id_Rol) REFERENCES Roles(Id_Rol) ON DELETE CASCADE,
 	CONSTRAINT fk_rol_personal_To_personal FOREIGN KEY(Cod_Personal) REFERENCES Personal(Cod_Personal) ON DELETE CASCADE
@@ -69,7 +70,7 @@ CREATE TABLE Rol_Responsable(
 	Id_Rol_Responsable INT NOT NULL IDENTITY(1,1),
 	Id_Rol INT NOT NULL UNIQUE,
 	Cod_Responsable CHAR(10) NOT NULL UNIQUE,
-	Contraseña VARCHAR(12) NOT NULL,
+	Contraseï¿½a VARCHAR(12) NOT NULL,
 	CONSTRAINT pk_rol_responsable PRIMARY KEY(Id_Rol_Responsable),
 	CONSTRAINT fk_rol_responsable_To_rol FOREIGN KEY(Id_Rol) REFERENCES Roles(Id_Rol) ON DELETE CASCADE,
 	CONSTRAINT fk_rol_responsable_To_responsable FOREIGN KEY(Cod_Responsable) REFERENCES Responsables(Cod_Responsable) ON DELETE CASCADE
@@ -92,7 +93,7 @@ CREATE TABLE Rol_Alumno(
 	Id_Rol_Alumno INT NOT NULL IDENTITY(1,1),
 	Id_Rol INT NOT NULL UNIQUE,
 	Cod_Alumno CHAR(10) NOT NULL UNIQUE,
-	Contraseña VARCHAR(12) NOT NULL,
+	Contraseï¿½a VARCHAR(12) NOT NULL,
 	CONSTRAINT pk_rol_alumno PRIMARY KEY(Id_Rol_Alumno),
 	CONSTRAINT fk_rol_alumno_To_rol FOREIGN KEY(Id_Rol) REFERENCES Roles(Id_Rol) ON DELETE CASCADE,
 	CONSTRAINT fk_rol_alumno_To_alumno FOREIGN KEY(Cod_Alumno) REFERENCES Alumnos(Cod_Alumno) ON DELETE CASCADE
