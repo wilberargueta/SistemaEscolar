@@ -1,9 +1,12 @@
 package com.gdunivo.es.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Alumnos {
+public class Alumnos implements Serializable{
 
+
+	private static final long serialVersionUID = 1L;
 	private String codAlumno;
 	private String nombre;
 	private String apellido;

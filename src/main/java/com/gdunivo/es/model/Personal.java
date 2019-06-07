@@ -7,6 +7,7 @@ public class Personal {
 	private String nombre;
 	private String apellido;
 	private String direccion;
+	private String telefono;
 	private String DUI;
 	private String NIT;
 	private LocalDate fechaNacimiento;
@@ -15,12 +16,13 @@ public class Personal {
 
 	}
 
-	public Personal(String codPersonal, String nombre, String apellido, String direccion, String dUI, String nIT,
-			LocalDate fechaNacimiento) {
+	public Personal(String codPersonal, String nombre, String apellido, String direccion, String telefono, String dUI,
+			String nIT, LocalDate fechaNacimiento) {
 		this.codPersonal = codPersonal;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.direccion = direccion;
+		this.telefono = telefono;
 		DUI = dUI;
 		NIT = nIT;
 		this.fechaNacimiento = fechaNacimiento;
@@ -58,6 +60,14 @@ public class Personal {
 		this.direccion = direccion;
 	}
 
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+
 	public String getDUI() {
 		return DUI;
 	}
@@ -85,7 +95,8 @@ public class Personal {
 	@Override
 	public String toString() {
 		return "Personal [codPersonal=" + codPersonal + ", nombre=" + nombre + ", apellido=" + apellido + ", direccion="
-				+ direccion + ", DUI=" + DUI + ", NIT=" + NIT + ", fechaNacimiento=" + fechaNacimiento + "]";
+				+ direccion + ", telefono=" + telefono + ", DUI=" + DUI + ", NIT=" + NIT + ", fechaNacimiento="
+				+ fechaNacimiento + "]";
 	}
 
 }

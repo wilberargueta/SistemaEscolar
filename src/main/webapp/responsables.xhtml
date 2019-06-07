@@ -1,0 +1,144 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+
+	<ui:define name="content">
+		<h:form id="topbar">
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						value="Nuevo" actionListener="#{responsables.limpiarFormulario}"
+						update=":form1" onclick="PF('dlgForm').show();" />
+					<p:commandButton
+						style="margin-left:1em;background-color: #007bff;background: #007bff;"
+						rendered="#{responsables.seleccionado}" value="Actualizar"
+						onclick="PF('dlgForm').show();" />
+					<p:commandButton
+						style="margin-left:1em;background-color: #f44b42;background: #f44b42;"
+						rendered="#{responsables.seleccionado}" value="Eliminar">
+						<p:confirm header="Eliminando Responsable"
+							message="Esta seguro de eliminar el registro?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+					<p:commandButton
+						style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
+						rendered="#{responsables.seleccionado}" value="Cancelar"
+						update=":form1, topbar"
+						actionListener="#{responsables.limpiarFormulario}" />
+
+				</f:facet>
+			</p:toolbar>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton
+					style="margin-left:1em;background-color: #f44b42;background: #f44b42;"
+					value="Si" actionListener="#{responsables.eliminarResponsable}"
+					update=":form1, topbar, :tblResponsable" />
+				<p:commandButton
+					style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
+					value="No" type="button" styleClass="ui-confirmdialog-no" />
+			</p:confirmDialog>
+		</h:form>
+		<p:dialog header="Formulario para registrar responsable"
+			widgetVar="dlgForm" modal="true" style="font-size:17px;" width="700"
+			resizable="false" closable="false" closeOnEscape="true">
+
+			<h:form id="form1">
+				<p:panelGrid columns="1" layout="grid">
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Codigo Responsable" />
+						<p:inputText size="10" disabled="true"
+							value="#{responsables.responsable.codResponsable}" />
+					</h:panelGrid>
+					<h:panelGrid columns="4">
+						<p:outputLabel value="Nombre" />
+						<p:inputText id="txtNombre"
+							value="#{responsables.responsable.nombre}" required="true" />
+
+						<p:outputLabel value="Apellido" />
+						<p:inputText id="txtApellido"
+							value="#{responsables.responsable.apellido}" required="true" />
+
+						<p:outputLabel value="Telefono" />
+						<p:inputMask mask="+(999)9999-9999"
+							value="#{responsables.responsable.telefono}" />
+						<p:outputLabel value="DUI" />
+						<p:inputMask mask="99999999-9"
+							value="#{responsables.responsable.DUI}" />
+						<p:outputLabel value="Contraseña" />
+						<p:password value="#{responsables.rResponsable.contraseña}" />
+
+					</h:panelGrid>
+					<h:panelGrid columns="3">
+						<p:outputLabel value="Direccion" />
+						<p:inputText size="50" id="txtDireccion"
+							value="#{responsables.responsable.direccion}" required="true" />
+					</h:panelGrid>
+				</p:panelGrid>
+				<h:panelGrid columns="3">
+
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						id="btnGuardar" value="Guardar"
+						actionListener="#{responsables.registrar}"
+						rendered="#{!responsables.seleccionado}"
+						update=":tblResponsable,@form" onclick="PF('dlgForm').close();" />
+
+
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						rendered="#{responsables.seleccionado}" value="Actualizar"
+						actionListener="#{responsables.actualizarResponsable}"
+						update=":tblResponsable,@form" onclick="PF('dlgForm').close();" />
+
+
+
+					<p:commandButton
+						style="background-color:#6c757d;background:#6c757d;"
+						value="Cancelar"
+						actionListener="#{responsables.limpiarFormulario}"
+						onclick="PF('dlgForm').close();" />
+
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		<h:form id="tblResponsable">
+			<p:dataTable var="responsable" value="#{responsables.responsables}"
+				rows="8" paginator="true" selectionMode="single"
+				selection="#{responsables.responsable}"
+				rowKey="#{responsable.codResponsable}">
+				<f:facet name="header">Listado de Responsables</f:facet>
+				<p:ajax event="rowSelect"
+					listener="#{responsables.seleccionarResponsable}"
+					update=":form1,:topbar"></p:ajax>
+				<p:column headerText="Cod Responsable">
+					<h:outputText value="#{responsable.codResponsable}" />
+				</p:column>
+
+				<p:column headerText="Nombre">
+					<h:outputText value="#{responsable.nombre}" />
+				</p:column>
+
+				<p:column headerText="Apellido">
+					<h:outputText value="#{responsable.apellido}" />
+				</p:column>
+
+				<p:column headerText="Direccion">
+					<h:outputText value="#{responsable.direccion}" />
+				</p:column>
+				<p:column headerText="Telefono">
+					<h:outputText value="#{responsable.telefono}" />
+				</p:column>
+				<p:column headerText="DUI">
+					<h:outputText value="#{responsable.DUI}">
+					</h:outputText>
+
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

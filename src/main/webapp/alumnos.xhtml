@@ -1,0 +1,145 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+
+	<ui:define name="content">
+		<h:form id="topbar">
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						value="Nuevo" actionListener="#{alumnos.limpiarFormulario}"
+						update=":form1" onclick="PF('dlgForm').show();" />
+					<p:commandButton
+						style="margin-left:1em;background-color: #007bff;background: #007bff;"
+						rendered="#{alumnos.seleccionado}" value="Actualizar"
+						onclick="PF('dlgForm').show();" />
+					<p:commandButton
+						style="margin-left:1em;background-color: #f44b42;background: #f44b42;"
+						rendered="#{alumnos.seleccionado}" value="Eliminar">
+						<p:confirm header="Eliminando Alumno"
+							message="Esta seguro de eliminar el registro?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+					<p:commandButton
+						style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
+						rendered="#{alumnos.seleccionado}" value="Cancelar"
+						update=":form1, topbar"
+						actionListener="#{alumnos.limpiarFormulario}" />
+
+				</f:facet>
+			</p:toolbar>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton
+					style="margin-left:1em;background-color: #f44b42;background: #f44b42;"
+					value="Si" actionListener="#{alumnos.eliminarAlumno}"
+					update=":form1, topbar, :tblAlumno" />
+				<p:commandButton
+					style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
+					value="No" type="button" styleClass="ui-confirmdialog-no" />
+			</p:confirmDialog>
+		</h:form>
+		<p:dialog header="Formulario para registrar alumnos"
+			widgetVar="dlgForm" modal="true" style="font-size:17px;" width="700"
+			resizable="false" closable="false" closeOnEscape="true">
+
+			<h:form id="form1">
+				<p:panelGrid columns="1" layout="grid">
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Codigo Usuario" />
+						<p:inputText size="10" disabled="true"
+							value="#{alumnos.alumno.codAlumno}" />
+					</h:panelGrid>
+					<h:panelGrid columns="4">
+						<p:outputLabel value="Nombre" />
+						<p:inputText id="txtNombre" value="#{alumnos.alumno.nombre}"
+							required="true" />
+
+						<p:outputLabel value="Apellido" />
+						<p:inputText id="txtApellido" value="#{alumnos.alumno.apellido}"
+							required="true" />
+
+						<p:outputLabel value="Fecha Nacimiento:" />
+						<p:calendar size="6" id="txtFNacimiento" mask="true"
+							value="#{alumnos.fecha}" required="true" pattern="dd/MM/yyyy" />
+						<p:outputLabel value="Sexo" />
+						<p:selectOneMenu value="#{alumnos.alumno.sexo}" required="true">
+							<f:selectItem itemLabel="Seleccione Sexo"></f:selectItem>
+							<f:selectItem itemLabel="Masculino" itemValue="M"></f:selectItem>
+							<f:selectItem itemLabel="Femenino" itemValue="F"></f:selectItem>
+						</p:selectOneMenu>
+						
+						<p:outputLabel value="Contraseña"/>
+						<p:password value="#{alumnos.rAlumno.contraseña}" required="true"></p:password>
+					</h:panelGrid>
+					<h:panelGrid columns="3">
+						<p:outputLabel value="Direccion" />
+						<p:inputText size="50" id="txtDireccion"
+							value="#{alumnos.alumno.direccion}" required="true" />
+					</h:panelGrid>
+				</p:panelGrid>
+				<h:panelGrid columns="3">
+
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						id="btnGuardar" value="Guardar"
+						actionListener="#{alumnos.registrar}"
+						rendered="#{!alumnos.seleccionado}" update=":tblAlumno,@form"
+						onclick="PF('dlgForm').close();" />
+
+
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						rendered="#{alumnos.seleccionado}" value="Actualizar"
+						actionListener="#{alumnos.actualizarAlumno}"
+						update=":tblAlumno,@form" onclick="PF('dlgForm').close();" />
+
+
+
+					<p:commandButton
+						style="background-color:#6c757d;background:#6c757d;"
+						value="Cancelar" actionListener="#{alumnos.limpiarFormulario}"
+						onclick="PF('dlgForm').close();" />
+
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		<h:form id="tblAlumno">
+			<p:dataTable var="alumno" value="#{alumnos.alumnos}" rows="8"
+				paginator="true" selectionMode="single"
+				selection="#{alumnos.alumno}" rowKey="#{alumno.codAlumno}">
+				<f:facet name="header">Listado de Alumnos</f:facet>
+				<p:ajax event="rowSelect" listener="#{alumnos.seleccionarAlumno}"
+					update=":form1,:topbar"></p:ajax>
+				<p:column headerText="Cod Alumno">
+					<h:outputText value="#{alumno.codAlumno}" />
+				</p:column>
+
+				<p:column headerText="Nombre">
+					<h:outputText value="#{alumno.nombre}" />
+				</p:column>
+
+				<p:column headerText="Apellido">
+					<h:outputText value="#{alumno.apellido}" />
+				</p:column>
+
+				<p:column headerText="Direccion">
+					<h:outputText value="#{alumno.direccion}" />
+				</p:column>
+				<p:column headerText="Fecha Nacimiento">
+					<h:outputText value="#{alumno.fechaNacimiento}" />
+				</p:column>
+				<p:column headerText="Sexo">
+					<h:outputText value="#{alumno.sexo}">
+						<f:converter converterId="sexoConver"></f:converter>
+					</h:outputText>
+
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,157 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+
+	<ui:define name="content">
+		<h:form id="topbar">
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						value="Nuevo" actionListener="#{personal.limpiarFormulario}"
+						update=":form1" onclick="PF('dlgForm').show();" />
+					<p:commandButton
+						style="margin-left:1em;background-color: #007bff;background: #007bff;"
+						rendered="#{personal.seleccionado}" value="Actualizar"
+						onclick="PF('dlgForm').show();" />
+					<p:commandButton
+						style="margin-left:1em;background-color: #f44b42;background: #f44b42;"
+						rendered="#{personal.seleccionado}" value="Eliminar">
+						<p:confirm header="Eliminando Personal"
+							message="Esta seguro de eliminar el registro?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+					<p:commandButton
+						style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
+						rendered="#{personal.seleccionado}" value="Cancelar"
+						update=":form1, topbar"
+						actionListener="#{personal.limpiarFormulario}" />
+
+				</f:facet>
+			</p:toolbar>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton
+					style="margin-left:1em;background-color: #f44b42;background: #f44b42;"
+					value="Si" actionListener="#{personal.eliminarPersonal}"
+					update=":form1, topbar, :tblPersonal" />
+				<p:commandButton
+					style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
+					value="No" type="button" styleClass="ui-confirmdialog-no" />
+			</p:confirmDialog>
+		</h:form>
+		<p:dialog header="Formulario para registrar personal"
+			widgetVar="dlgForm" modal="true" style="font-size:16px;" width="700"
+			resizable="false" closable="false" closeOnEscape="true">
+
+			<h:form id="form1">
+				<p:panelGrid columns="1" layout="grid">
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Codigo Personal" />
+						<p:inputText size="10" disabled="true"
+							value="#{personal.personal.codPersonal}" />
+					</h:panelGrid>
+					<h:panelGrid columns="4">
+						<p:outputLabel value="Nombre" />
+						<p:inputText id="txtNombre" value="#{personal.personal.nombre}"
+							required="true" />
+
+						<p:outputLabel value="Apellido" />
+						<p:inputText id="txtApellido"
+							value="#{personal.personal.apellido}" required="true" />
+
+						<p:outputLabel value="Fecha Nacimiento:" />
+						<p:calendar size="6" id="txtFNacimiento" mask="true"
+							value="#{personal.fecha}" required="true" pattern="dd/MM/yyyy" />
+						<p:outputLabel value="Telefono" />
+						<p:inputMask mask="+(999)9999-9999"
+							value="#{personal.personal.telefono}" />
+						<p:outputLabel value="DUI" />
+						<p:inputMask mask="99999999-9" value="#{personal.personal.DUI}" />
+						<p:outputLabel value="NIT" />
+						<p:inputMask mask="99999999-9" value="#{personal.personal.NIT}" />
+
+						<p:outputLabel value="Contraseña" />
+						<p:password value="#{personal.rPersonal.contraseña}"
+							required="true"/>
+
+						<p:outputLabel value="Rol" />
+						<p:selectOneMenu value="#{personal.rol}" required="true">
+							<f:selectItem itemLabel="Seleccione Rol"/>
+							<f:selectItem itemLabel="Administrador"
+								itemValue="#{personal.admin}"/>
+							<f:selectItem itemLabel="Personal" itemValue="#{personal.perso}"/>
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<h:panelGrid columns="3">
+						<p:outputLabel value="Direccion" />
+						<p:inputText size="50" id="txtDireccion"
+							value="#{personal.personal.direccion}" required="true" />
+					</h:panelGrid>
+				</p:panelGrid>
+				<h:panelGrid columns="3">
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						value="Guardar" actionListener="#{personal.registrar}"
+						rendered="#{!personal.seleccionado}"
+						update=":tblPersonal,@form" onclick="PF('dlgForm').close();" />
+
+
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						rendered="#{personal.seleccionado}" value="Actualizar"
+						
+						actionListener="#{personal.probar}" update=":tblPersonal,@form"
+						onclick="PF('dlgForm').close();" />
+
+
+
+					<p:commandButton
+						style="background-color:#6c757d;background:#6c757d;"
+						value="Cancelar" actionListener="#{personal.limpiarFormulario}"
+						onclick="PF('dlgForm').close();" />
+
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		<h:form id="tblPersonal">
+			<p:dataTable var="persons" value="#{personal.listaPersonal}" rows="8"
+				paginator="true" selectionMode="single"
+				selection="#{personal.personal}" rowKey="#{persons.codPersonal}">
+				<f:facet name="header">Listado de Personal</f:facet>
+				<p:ajax event="rowSelect" listener="#{personal.seleccionarPersonal}"
+					update=":form1,:topbar"></p:ajax>
+				<p:column headerText="Cod Personal">
+					<h:outputText value="#{persons.codPersonal}" />
+				</p:column>
+
+				<p:column headerText="Nombre">
+					<h:outputText value="#{persons.nombre}" />
+				</p:column>
+
+				<p:column headerText="Apellido">
+					<h:outputText value="#{persons.apellido}" />
+				</p:column>
+
+				<p:column headerText="Direccion">
+					<h:outputText value="#{persons.direccion}" />
+				</p:column>
+				<p:column headerText="Fecha Nacimiento">
+					<h:outputText value="#{persons.fechaNacimiento}" />
+				</p:column>
+				<p:column headerText="Telefono">
+					<h:outputText value="#{persons.telefono}" />
+				</p:column>
+				<p:column headerText="DUI">
+					<h:outputText value="#{persons.DUI}" />
+				</p:column>
+				<p:column headerText="NIT">
+					<h:outputText value="#{persons.NIT}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,107 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+
+	<ui:define name="content">
+		<h:form id="topbar">
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						value="Nuevo" actionListener="#{materias.limpiarFormulario}"
+						update=":form1" onclick="PF('dlgForm').show();" />
+					<p:commandButton
+						style="margin-left:1em;background-color: #007bff;background: #007bff;"
+						rendered="#{materias.seleccionado}" value="Actualizar"
+						onclick="PF('dlgForm').show();" />
+					<p:commandButton
+						style="margin-left:1em;background-color: #f44b42;background: #f44b42;"
+						rendered="#{materias.seleccionado}" value="Eliminar">
+						<p:confirm header="Eliminando Materia"
+							message="Esta seguro de eliminar el registro?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+					<p:commandButton
+						style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
+						rendered="#{materias.seleccionado}" value="Cancelar"
+						update=":form1, topbar"
+						actionListener="#{materias.limpiarFormulario}" />
+
+				</f:facet>
+			</p:toolbar>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton
+					style="margin-left:1em;background-color: #f44b42;background: #f44b42;"
+					value="Si" actionListener="#{materias.eliminarMateria}"
+					update=":form1, topbar, :tblMateria" />
+				<p:commandButton
+					style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
+					value="No" type="button" styleClass="ui-confirmdialog-no" />
+			</p:confirmDialog>
+		</h:form>
+		<p:dialog header="Formulario para registrar materia"
+			widgetVar="dlgForm" modal="true" style="font-size:17px;" width="700"
+			resizable="false" closable="false" closeOnEscape="true">
+
+			<h:form id="form1">
+				<p:panelGrid columns="1" layout="grid">
+
+					<h:panelGrid columns="4">
+						<p:outputLabel value="Codigo Materia" />
+						<p:inputText size="10" disabled="true"
+							value="#{materias.materia.codMateria}" />
+						<p:outputLabel value="Nombre Materia" />
+						<p:inputText id="txtNombre" value="#{materias.materia.materia}"
+							required="true" />
+					</h:panelGrid>
+
+				</p:panelGrid>
+				<h:panelGrid columns="3">
+
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						id="btnGuardar" value="Guardar"
+						actionListener="#{materias.registrar}"
+						rendered="#{!materias.seleccionado}" update=":tblMateria,@form"
+						onclick="PF('dlgForm').close();" />
+
+
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						rendered="#{materias.seleccionado}" value="Actualizar"
+						actionListener="#{materias.actualizarMateria}"
+						update=":tblMateria,@form" onclick="PF('dlgForm').close();" />
+
+
+
+					<p:commandButton
+						style="background-color:#6c757d;background:#6c757d;"
+						value="Cancelar" actionListener="#{materias.limpiarFormulario}"
+						onclick="PF('dlgForm').close();" />
+
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		<h:form id="tblMateria">
+			<p:dataTable var="materia" value="#{materias.lista}" rows="8"
+				paginator="true" selectionMode="single"
+				selection="#{materias.materia}" rowKey="#{materia.codMateria}">
+				<f:facet name="header">Listado de Materias</f:facet>
+				<p:ajax event="rowSelect" listener="#{materias.seleccionarMateria}"
+					update=":form1,:topbar"></p:ajax>
+				<p:column headerText="Cod Mateia">
+					<h:outputText value="#{materia.codMateria}" />
+				</p:column>
+
+				<p:column headerText="Nombre Materia">
+					<h:outputText value="#{materia.materia}" />
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

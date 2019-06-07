@@ -3,16 +3,17 @@ package com.gdunivo.es.repository.imp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.gdunivo.es.config.ConexionFactory;
 import com.gdunivo.es.model.Alumnos;
 import com.gdunivo.es.repository.AlumnosRepository;
 
-public class AlumnosRepositoryImp implements AlumnosRepository {
+public class AlumnosRepositoryImp implements AlumnosRepository, Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private Alumnos alumno;
 	private List<Alumnos> listaAlumnos;
 
@@ -40,14 +41,14 @@ public class AlumnosRepositoryImp implements AlumnosRepository {
 				this.alumno.setFechaNacimiento(new Date(result.getDate("Fecha_Nacimiento").getTime()).toLocalDate());
 				this.alumno.setSexo(result.getString("Sexo"));
 			}
+			result.close();
+			sql.close();
 			return this.alumno;
 
 		} catch (SQLException e) {
 			System.out.println("Error ingresando Alumno::" + e.getMessage());
 			e.printStackTrace();
-			ConexionFactory.closeConection();
-		} finally {
-			ConexionFactory.closeConection();
+
 		}
 		return null;
 	}
@@ -77,14 +78,14 @@ public class AlumnosRepositoryImp implements AlumnosRepository {
 				this.alumno.setFechaNacimiento(new Date(result.getDate("Fecha_Nacimiento").getTime()).toLocalDate());
 				this.alumno.setSexo(result.getString("Sexo"));
 			}
+			result.close();
+			sql.close();
 			return this.alumno;
 
 		} catch (SQLException e) {
 			System.out.println("Error actualizando Alumno::" + e.getMessage());
 			e.printStackTrace();
-			ConexionFactory.closeConection();
-		} finally {
-			ConexionFactory.closeConection();
+
 		}
 		return null;
 	}
@@ -97,14 +98,13 @@ public class AlumnosRepositoryImp implements AlumnosRepository {
 		PreparedStatement sql = ConexionFactory.getStatement(query);
 		try {
 			sql.setString(1, alumno.getCodAlumno());
-
-			return sql.execute();
+			boolean value = sql.execute();
+			sql.close();
+			return value;
 		} catch (SQLException e) {
 			System.out.println("Error eliminando Alumno::" + e.getMessage());
 			e.printStackTrace();
-			ConexionFactory.closeConection();
-		} finally {
-			ConexionFactory.closeConection();
+
 		}
 
 		return false;
@@ -136,8 +136,6 @@ public class AlumnosRepositoryImp implements AlumnosRepository {
 		} catch (Exception e) {
 			System.out.println("Error obteniendo la lista de alumnos::" + e.getMessage());
 
-		} finally {
-
 		}
 		return null;
 	}
@@ -162,13 +160,13 @@ public class AlumnosRepositoryImp implements AlumnosRepository {
 				this.alumno.setSexo(result.getString("Sexo"));
 
 			}
+			result.close();
+			sql.close();
 			return this.alumno;
 
 		} catch (Exception e) {
 			System.out.println("Error obteniendo la lista de alumnos::" + e.getMessage());
-			ConexionFactory.closeConection();
-		} finally {
-			ConexionFactory.closeConection();
+
 		}
 		return null;
 	}
@@ -195,13 +193,13 @@ public class AlumnosRepositoryImp implements AlumnosRepository {
 				this.listaAlumnos.add(m);
 
 			}
+			result.close();
+			sql.close();
 			return this.listaAlumnos;
 
 		} catch (Exception e) {
 			System.out.println("Error obteniendo la lista de alumnos::" + e.getMessage());
-			ConexionFactory.closeConection();
-		} finally {
-			ConexionFactory.closeConection();
+
 		}
 		return null;
 	}
@@ -232,9 +230,7 @@ public class AlumnosRepositoryImp implements AlumnosRepository {
 
 		} catch (Exception e) {
 			System.out.println("Error obteniendo la lista de alumnos::" + e.getMessage());
-			ConexionFactory.closeConection();
-		} finally {
-			ConexionFactory.closeConection();
+
 		}
 		return null;
 	}

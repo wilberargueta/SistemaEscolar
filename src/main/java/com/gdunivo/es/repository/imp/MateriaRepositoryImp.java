@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gdunivo.es.config.ConexionFactory;
-import com.gdunivo.es.exception.NoDatosException;
+import com.gdunivo.es.exception.RecursoEliminadoException;
 import com.gdunivo.es.model.Materias;
 import com.gdunivo.es.repository.MateriasRepository;
 
@@ -31,15 +31,19 @@ public class MateriaRepositoryImp implements MateriasRepository {
 				this.materia.setMateria(res.getString(2));
 
 			}
-
+			res.close();
+			sql.close();
 			return this.materia;
 
 		} catch (SQLException e) {
-			ConexionFactory.closeConection();
-			System.out.println("Error guardando la materia::" + e.getMessage().toString());
-		} finally {
-
-			ConexionFactory.closeConection();
+			
+			if (e.getSQLState() == "23000" && e.getErrorCode() == 2627) {
+				throw new RecursoEliminadoException("El recurso fue eliminado, "
+						+ "pero se encuentra en los resgistros. Desea reactivarlo?");
+			}else {
+				System.out.println("Error guardando la materia::" + e.getMessage().toString());
+				e.printStackTrace();
+			}
 		}
 
 		return null;
@@ -61,16 +65,13 @@ public class MateriaRepositoryImp implements MateriasRepository {
 				this.materia.setMateria(res.getString(2));
 
 			}
-
+			res.close();
+			sql.close();
 			return this.materia;
 
 		} catch (SQLException e) {
-			ConexionFactory.closeConection();
 			System.out.println("Error actualizando la materia::" + e.getMessage().toString());
 			e.printStackTrace();
-		} finally {
-
-			ConexionFactory.closeConection();
 		}
 
 		return null;
@@ -85,15 +86,13 @@ public class MateriaRepositoryImp implements MateriasRepository {
 
 		try {
 			sql.setString(1, materia.getCodMateria());
-			return sql.execute();
+			boolean value = sql.execute();
+			sql.close();
+			return value;
 
 		} catch (SQLException e) {
-			ConexionFactory.closeConection();
 			System.out.println("Error actualizando la materia::" + e.getMessage().toString());
 			e.printStackTrace();
-		} finally {
-
-			ConexionFactory.closeConection();
 		}
 		return false;
 	}
@@ -114,14 +113,13 @@ public class MateriaRepositoryImp implements MateriasRepository {
 				m.setMateria(result.getString("Materia"));
 				this.listaMaterias.add(m);
 			}
+			result.close();
+			sql.close();
 			return this.listaMaterias;
 
 		} catch (SQLException e) {
-			ConexionFactory.closeConection();
 			System.out.println("Error extrallendo los datos de materias::" + e.getMessage().toString());
 			e.printStackTrace();
-		} finally {
-			ConexionFactory.closeConection();
 		}
 
 		return null;
@@ -138,24 +136,19 @@ public class MateriaRepositoryImp implements MateriasRepository {
 			sql.setString(1, codMateria);
 			ResultSet result = sql.executeQuery();
 
-			if (result.getRow() > 0) {
-				while (result.next()) {
+			while (result.next()) {
 
-					this.materia.setCodMateria(result.getString("Cod_Materia"));
-					this.materia.setMateria(result.getString("Materia"));
+				this.materia.setCodMateria(result.getString("Cod_Materia"));
+				this.materia.setMateria(result.getString("Materia"));
 
-				}
-				return this.materia;
-			} else {
-				throw new NoDatosException("El Codigo no conside con ningun registro");
 			}
+			result.close();
+			sql.close();
+			return this.materia;
 
 		} catch (SQLException e) {
-			ConexionFactory.closeConection();
 			System.out.println("Error extrallendo los datos de materias::" + e.getMessage().toString());
 			e.printStackTrace();
-		} finally {
-			ConexionFactory.closeConection();
 		}
 
 		return null;
@@ -177,14 +170,13 @@ public class MateriaRepositoryImp implements MateriasRepository {
 				m.setMateria(result.getString("Materia"));
 				this.listaMaterias.add(m);
 			}
+			result.close();
+			sql.close();
 			return this.listaMaterias;
 
 		} catch (SQLException e) {
-			ConexionFactory.closeConection();
 			System.out.println("Error extrallendo los datos de materias::" + e.getMessage().toString());
 			e.printStackTrace();
-		} finally {
-			ConexionFactory.closeConection();
 		}
 
 		return null;

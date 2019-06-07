@@ -1,34 +1,30 @@
-<!DOCTYPE HTML>
-<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
-<h:head>
-	<meta charset="utf-8" name="viewport"
-		content="width=device-width, initial-scale=1"
-		http-equiv="X-UA-Conpatible" />
-	<title>Inicio de sesion</title>
-	<h:outputStylesheet name="foundation/css/foundation.css" />
-</h:head>
-<h:body>
-	<h:form>
-		<h:panelGrid id="grid" cellpadding="5" columns="2"
-			style="margin-bottom:10px">
-			<f:facet name="header">
-				<h:outputLabel value="Inicio de Sesion" />
-			</f:facet>
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	template="/WEB-INF/template.xhtml">
 
-			<p:outputLabel for="firstname" value="Firstname:" />
-			<p:inputText id="firstname" />
 
-			<p:outputLabel for="surname" value="Surname:" />
-			<p:inputText id="surname" />
-		</h:panelGrid>
+	<ui:define name="content">
+		<h:form>
+			<h:panelGrid id="grid" cellpadding="5" columns="2"
+				style="margin-bottom:10px">
+				<f:facet name="header">
+					<h:outputLabel value="Inicio de Sesion" />
+				</f:facet>
 
-		<h:panelGrid columns="2" cellpadding="5">
-			<p:commandButton value="Iniciar" />
-			<p:commandButton value="Cancelar" />
-		</h:panelGrid>
-	</h:form>
-</h:body>
-</html>
+				<p:outputLabel for="codigo" value="Codigo" />
+				<p:inputText id="codigo" />
+				
+				<p:outputLabel for="pass" value="Contraseña" />
+				<p:password id="pass"/>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" cellpadding="5">
+				<p:commandButton styleClass="button-blue" value="Iniciar"  action="home"/>
+				<p:commandButton styleClass="button-red" value="Cancelar" action="logout"/>
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

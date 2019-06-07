@@ -1,0 +1,67 @@
+.ui-button-text-only .ui-button-text {
+	color: #fff;
+}
+
+
+
+.button-red .ui-button-text-only .ui-button-text {
+	background-color: #f44b42;
+	background: #f44b42;
+
+}
+.button-red {
+	background-color: #f44b42;
+	background: #f44b42;
+}
+
+ .button-blue {
+	background-color: #007bff;
+	background: #007bff;
+	
+}
+
+.button-green {
+	background-color: #28a745;
+	background: #28a745;
+	
+}
+.button-silver{
+	background-color:#6c757d;
+	background:#6c757d;
+}
+
+.item1 {
+	grid-area: topbar;
+}
+
+.item2 {
+	grid-area: slide;
+}
+
+.item3 {
+	grid-area: content
+}
+
+.item4 {
+	grid-area: footer
+}
+
+.grid-container {
+	display: grid;
+	grid-template-areas: 'topbar topbar topbar topbar'
+		'slide content content content' 'footer footer footer footer';
+	grid-gap: 10px;
+	border: 1px;
+	border-color: #f44b42;
+	padding: 0;
+}
+
+.grid-item {
+	border: 1em;
+	text-align: center;
+	padding: 0px;
+}
+
+.ui-widget .ui-widget {
+	font-size: 17px;
+}
