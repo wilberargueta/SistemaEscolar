@@ -10,3 +10,5 @@
 .springBeans
 .sts4-cache
 .classpath
+.project
+*.prefs
