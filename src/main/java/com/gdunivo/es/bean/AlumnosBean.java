@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,10 +13,16 @@ import javax.faces.bean.SessionScoped;
 
 import org.primefaces.event.SelectEvent;
 
+import com.gdunivo.es.model.AlumnoClase;
 import com.gdunivo.es.model.Alumnos;
+import com.gdunivo.es.model.Clases;
+import com.gdunivo.es.model.Materias;
 import com.gdunivo.es.model.RolAlumno;
 import com.gdunivo.es.model.Roles;
+import com.gdunivo.es.repository.AlumnoClaseRepository;
 import com.gdunivo.es.repository.AlumnosRepository;
+import com.gdunivo.es.repository.ClasesRepository;
+import com.gdunivo.es.repository.MateriasRepository;
 import com.gdunivo.es.repository.RepositoryFactory;
 import com.gdunivo.es.repository.RolAlumnoRepository;
 
@@ -28,18 +35,27 @@ public class AlumnosBean implements Serializable {
 	private Alumnos alumnoSelec;
 	private AlumnosRepository persis = (AlumnosRepository) RepositoryFactory.getRepository("Alumnos");
 	private RolAlumnoRepository rol = (RolAlumnoRepository) RepositoryFactory.getRepository("RolAlumno");
+	private AlumnoClaseRepository pAClase = (AlumnoClaseRepository) RepositoryFactory.getRepository("AlumnoClase");
+	private MateriasRepository pMaterias = (MateriasRepository) RepositoryFactory.getRepository("Materias");
+	private ClasesRepository pClases = (ClasesRepository) RepositoryFactory.getRepository("Clases");
 	private Date fecha;
 	private List<Alumnos> alumnos;
+	private List<Clases> listaClases;
 	private boolean seleccionado = false;
 	private RolAlumno rAlumno = new RolAlumno();
 	private Roles r = new Roles();
+	private List<AlumnoClase> listaClasesAlumno = new ArrayList<>();
+	private AlumnoClase aClase = new AlumnoClase();
+	private Materias materia = new Materias();
+	private List<Clases> clasesSeleccionadas = new ArrayList<>();
+
+	private boolean claseSeleccionada = false;
 
 	public AlumnosBean() {
 		this.r.setId_Role(3);
 		this.actualizarTabla();
 	}
-	
-	
+
 	public Alumnos getAlumno() {
 		return alumno;
 	}
@@ -97,6 +113,54 @@ public class AlumnosBean implements Serializable {
 		this.rAlumno = rAlumno;
 	}
 
+	public List<Clases> getListaClases() {
+		return listaClases;
+	}
+
+	public void setListaClases(List<Clases> listaClases) {
+		this.listaClases = listaClases;
+	}
+
+	public List<AlumnoClase> getListaClasesAlumno() {
+		return listaClasesAlumno;
+	}
+
+	public void setListaClasesAlumno(List<AlumnoClase> listaClasesAlumno) {
+		this.listaClasesAlumno = listaClasesAlumno;
+	}
+
+	public AlumnoClase getaClase() {
+		return aClase;
+	}
+
+	public void setaClase(AlumnoClase aClase) {
+		this.aClase = aClase;
+	}
+
+	public Materias getMateria() {
+		return materia;
+	}
+
+	public void setMateria(Materias materia) {
+		this.materia = materia;
+	}
+
+	public boolean isClaseSeleccionada() {
+		return claseSeleccionada;
+	}
+
+	public void setClaseSeleccionada(boolean claseSeleccionada) {
+		this.claseSeleccionada = claseSeleccionada;
+	}
+
+	public List<Clases> getClasesSeleccionadas() {
+		return clasesSeleccionadas;
+	}
+
+	public void setClasesSeleccionadas(List<Clases> clasesSeleccionadas) {
+		this.clasesSeleccionadas = clasesSeleccionadas;
+	}
+
 	public void registrar() {
 		this.alumno.setFechaNacimiento(convertDate(this.fecha));
 		this.alumno = this.persis.guardar(this.alumno);
@@ -142,6 +206,58 @@ public class AlumnosBean implements Serializable {
 		this.persis.eliminar(this.alumno);
 		this.limpiarFormulario();
 		this.actualizarTabla();
+	}
+
+	public String actualizarClases() {
+		this.listaClasesAlumno = this.pAClase.clasesPorAlumno(this.alumno);
+		return "inscripcion?faces-redirect=true";
+	}
+
+	public void seleccionarClase(SelectEvent event) {
+		this.aClase = (AlumnoClase) event.getObject();
+		this.claseSeleccionada = true;
+
+	}
+
+	public void limpiarClases() {
+		this.aClase = new AlumnoClase();
+		this.materia = new Materias();
+		this.listaClases = null;
+		this.claseSeleccionada = false;
+
+	}
+
+	public List<Materias> busquedaMateria(String query) {
+		return this.pMaterias.busquedaPorMateria(query);
+	}
+
+	public void listadoClases() {
+
+		this.listaClases = this.pClases.listadoClasesPorMateria(this.materia);
+	}
+
+	public void guardarClases() {
+
+		this.clasesSeleccionadas.forEach(c -> {
+
+			AlumnoClase ac = new AlumnoClase();
+			ac.setAlumno(this.alumno);
+			ac.setClase(c);
+			this.pAClase.guardar(ac);
+
+		});
+		this.listaClasesAlumno = this.pAClase.clasesPorAlumno(this.alumno);
+		this.limpiarClases();
+	}
+
+	public void eliminarMateria() {
+		this.pAClase.eliminar(aClase);
+		this.listaClasesAlumno = this.pAClase.clasesPorAlumno(this.alumno);
+		this.limpiarClases();
+	}
+	public String regresar() {
+		this.limpiarFormulario();
+		return "alumnos";
 	}
 
 }

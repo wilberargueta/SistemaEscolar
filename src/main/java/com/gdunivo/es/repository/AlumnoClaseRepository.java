@@ -23,5 +23,6 @@ public interface AlumnoClaseRepository {
 	public List<AlumnoClase> listaAlumnosPorClase(Clases c);
 
 	public List<AlumnoClase> clasesPorAlumno(Alumnos a);
+	
 
 }

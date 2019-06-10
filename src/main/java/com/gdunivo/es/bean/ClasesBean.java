@@ -13,9 +13,11 @@ import javax.faces.bean.ViewScoped;
 
 import org.primefaces.event.SelectEvent;
 
+import com.gdunivo.es.model.AlumnoClase;
 import com.gdunivo.es.model.Clases;
 import com.gdunivo.es.model.Materias;
 import com.gdunivo.es.model.Personal;
+import com.gdunivo.es.repository.AlumnoClaseRepository;
 import com.gdunivo.es.repository.ClasesRepository;
 import com.gdunivo.es.repository.MateriasRepository;
 import com.gdunivo.es.repository.PersonalRepository;
@@ -35,7 +37,8 @@ public class ClasesBean implements Serializable {
 	private Personal personal = new Personal();
 	private PersonalRepository pPersonal = (PersonalRepository) RepositoryFactory.getRepository("Personal");
 	private MateriasRepository pMateria = (MateriasRepository) RepositoryFactory.getRepository("Materias");
-
+	private AlumnoClaseRepository pAClase = (AlumnoClaseRepository) RepositoryFactory.getRepository("AlumnoClase");
+	private List<AlumnoClase> listaAClases = new ArrayList<>();
 	private Date hora1, hora2;
 
 	private String[] dias;
@@ -99,6 +102,14 @@ public class ClasesBean implements Serializable {
 
 	public void setDias(String[] dias) {
 		this.dias = dias;
+	}
+
+	public List<AlumnoClase> getListaAClases() {
+		return listaAClases;
+	}
+
+	public void setListaAClases(List<AlumnoClase> listaAClases) {
+		this.listaAClases = listaAClases;
 	}
 
 	public void splitHora(String hora) {
@@ -213,6 +224,10 @@ public class ClasesBean implements Serializable {
 		this.pClase.eliminar(this.clase);
 		this.actualizarTabla();
 		this.limpiar();
+	}
+
+	public void actualizarAlumnoClase() {
+		this.listaAClases = this.pAClase.listaAlumnosPorClase(clase);
 	}
 
 }

@@ -25,6 +25,10 @@
 							icon="pi pi-exclamation-triangle" />
 					</p:commandButton>
 					<p:commandButton
+						style="margin-left:1em;background-color:#5bc0de;background:#5bc0de;"
+						rendered="#{alumnos.seleccionado}" value="Inscripcion" action="#{alumnos.actualizarClases}"
+						 />
+					<p:commandButton
 						style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
 						rendered="#{alumnos.seleccionado}" value="Cancelar"
 						update=":form1, topbar"

@@ -6,6 +6,39 @@
 
 
 	<ui:define name="content">
+		<p:dialog header="Listado de alumnos por materia" widgetVar="dlgForm2"
+			modal="true" style="font-size:17px;" width="700" resizable="false"
+			closable="false" closeOnEscape="true">
+			<h:form id="formAlumnos">
+				<p:dataTable var="clase" value="#{clases.listaAClases}" rows="8"
+					paginator="true">
+					<f:facet name="header">Listado</f:facet>
+					<p:column headerText="Nombre">
+						<p:outputLabel value="#{clase.alumno.nombre}" />
+					</p:column>
+					<p:column headerText="Nombre">
+						<p:outputLabel value="#{clase.alumno.apellido}" />
+					</p:column>
+					<p:column headerText="Primer Periodo">
+						<p:outputLabel value="#{clase.notaPP}" />
+					</p:column>
+					<p:column headerText="Segundo Periodo">
+						<p:outputLabel value="#{clase.notaSP}" />
+					</p:column>
+					<p:column headerText="Tercer Periodo">
+						<p:outputLabel value="#{clase.notaTP}" />
+					</p:column>
+					<p:column headerText="Nota Final">
+						<p:outputLabel value="#{clase.notaFinal}" />
+					</p:column>
+
+				</p:dataTable>
+				<p:commandButton
+					style="background-color:#6c757d;background:#6c757d;" value="Cerrar"
+					onclick="PF('dlgForm2').close();" />
+			</h:form>
+
+		</p:dialog>
 		<h:form id="topbar">
 			<p:toolbar>
 				<f:facet name="left">
@@ -26,6 +59,12 @@
 							message="Esta seguro de eliminar el registro?"
 							icon="pi pi-exclamation-triangle" />
 					</p:commandButton>
+
+					<p:commandButton
+						style="margin-left:1em;background-color: #007bff;background: #007bff;"
+						value="Alumnos Inscritos" action="#{clases.actualizarAlumnoClase}"
+						rendered="#{clases.claseS}" onclick="PF('dlgForm2').show();"
+						update=":formAlumnos" />
 
 					<p:commandButton
 						style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
@@ -68,6 +107,7 @@
 							<p:column>
 								<p:outputLabel value="#{perso.apellido}" />
 							</p:column>
+
 						</p:autoComplete>
 
 
@@ -160,5 +200,6 @@
 
 			</p:dataTable>
 		</h:form>
+
 	</ui:define>
 </ui:composition>

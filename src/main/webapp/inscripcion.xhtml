@@ -1,0 +1,145 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+
+	<ui:define name="content">
+		<h:form id="topbar">
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton
+						style="background-color:#6c757d;background:#6c757d;"
+						value="Regresar" action="#{alumnos.regresar}" />
+					<p:commandButton
+						style="margin-left:1em;background-color: #28a745;background: #28a745;"
+						value="Agregar Matera" action="#{alumnos.limpiarClases}"
+						onclick="PF('dlgForm').show();" udpate=":form" />
+					<p:commandButton
+						style="margin-left:1em;background-color: #f44b42;background: #f44b42;"
+						rendered="#{alumnos.claseSeleccionada}" value="Eliminar">
+						<p:confirm header="Eliminando Materia"
+							message="Esta seguro de eliminar el registro?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+
+
+
+				</f:facet>
+			</p:toolbar>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton
+					style="margin-left:1em;background-color: #f44b42;background: #f44b42;"
+					value="Si" actionListener="#{alumnos.eliminarMateria}"
+					update=":form1, topbar" />
+				<p:commandButton
+					style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
+					value="No" type="button" styleClass="ui-confirmdialog-no" />
+			</p:confirmDialog>
+		</h:form>
+		<p:panelGrid columns="2">
+			<f:facet name="header">
+				<p:graphicImage height="155" width="250"
+					name="demo/images/perfil-alumno.png" />
+			</f:facet>
+			<h:outputText value="Codigo" />
+			<h:outputText value="#{alumnos.alumno.codAlumno}" />
+
+			<h:outputText value="Nombre:" />
+			<h:outputText value="#{alumnos.alumno.nombre}" />
+
+			<h:outputText value="Apelldio" />
+			<h:outputText value="#{alumnos.alumno.apellido}" />
+
+
+
+		</p:panelGrid>
+		<h:form id="form1">
+			<p:dataTable id="Alumno" var="clase"
+				value="#{alumnos.listaClasesAlumno}" rows="8" paginator="true"
+				selectionMode="single" selection="#{alumnos.aClase}"
+				rowKey="#{clase.idAlumnoClase}">
+				<f:facet name="header">Listado de Clases inscritas</f:facet>
+				<p:ajax event="rowSelect" listener="#{alumnos.seleccionarClase}"
+					update=":topbar"></p:ajax>
+				<p:column headerText="Materia">
+					<h:outputText value="#{clase.clase.materia.materia}" />
+				</p:column>
+				<p:column headerText="Primer Periodo">
+					<h:outputText value="#{clase.notaPP}" />
+				</p:column>
+				<p:column headerText="Segundo Periodo">
+					<h:outputText value="#{clase.notaSP}" />
+				</p:column>
+				<p:column headerText="Tercer Periodo">
+					<h:outputText value="#{clase.notaTP}" />
+				</p:column>
+				<p:column headerText="Nota Final">
+					<h:outputText value="#{clase.notaFinal}" />
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+		<p:dialog header="Agregar Materia" widgetVar="dlgForm" modal="true"
+			style="font-size:17px;" width="700" resizable="false"
+			closable="false" closeOnEscape="true">
+
+
+			<h:form id="form2">
+				<p:panelGrid columns="1">
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Seleccione Materia" />
+						<p:autoComplete size="15"
+							completeMethod="#{alumnos.busquedaMateria}" id="txtMateria"
+							value="#{alumnos.materia}" var="mate" itemLabel="#{mate.materia}"
+							itemValue="#{mate}" converter="materiaConver">
+							<p:ajax event="itemSelect" listener="#{alumnos.listadoClases}"
+								update="tbClases" />
+						</p:autoComplete>
+					</h:panelGrid>
+					<h:panelGrid columns="1">
+						<p:dataTable id="tbClases" var="clase"
+							value="#{alumnos.listaClases}"
+							selection="#{alumnos.clasesSeleccionadas}"
+							rowKey="#{clase.idClase}">
+							<f:facet name="header">Clases disponibles</f:facet>
+							<p:column selectionMode="multiple"
+								style="width:16px;text-align:center" />
+							<p:column headerText="Materia">
+								<p:outputLabel value="#{clase.materia.materia}" />
+							</p:column>
+							<p:column headerText="Turno">
+								<p:outputLabel value="#{clase.turno}" />
+							</p:column>
+							<p:column headerText="Seccion">
+								<p:outputLabel value="#{clase.seccion}" />
+							</p:column>
+							<p:column headerText="Docente">
+								<p:outputLabel
+									value="#{clase.personal.nombre.concat(' ').concat(clase.personal.apellido)}" />
+							</p:column>
+
+						</p:dataTable>
+					</h:panelGrid>
+
+				</p:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						value="Agregar" action="#{alumnos.guardarClases}" update=":form1"
+						onclick="PF('dlgForm').close();" rendered="#{!clases.claseS}" />
+
+
+					<p:commandButton
+						style="background-color:#6c757d;background:#6c757d;"
+						value="Cancelar" action="#{alumnos.limpiarClases}"
+						onclick="PF('dlgForm').close();" />
+
+				</h:panelGrid>
+
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
