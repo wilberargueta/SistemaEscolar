@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
-import javax.faces.bean.ViewScoped;
 
 import org.primefaces.event.SelectEvent;
 
@@ -21,7 +21,7 @@ import com.gdunivo.es.repository.RepositoryFactory;
 import com.gdunivo.es.repository.RolPersonalRepository;
 
 @ManagedBean(name = "personal")
-@ViewScoped
+@SessionScoped
 public class PersonalBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;

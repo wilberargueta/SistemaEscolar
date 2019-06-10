@@ -1,7 +1,10 @@
 package com.gdunivo.es.model;
 
-public class Clases {
+import java.io.Serializable;
 
+public class Clases implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private int idClase;
 	private Personal personal;
 	private Materias materia;
@@ -57,7 +60,7 @@ public class Clases {
 		this.seccion = seccion;
 	}
 
-	public String getDia() {
+	public String getDia() { 
 		return dia;
 	}
 

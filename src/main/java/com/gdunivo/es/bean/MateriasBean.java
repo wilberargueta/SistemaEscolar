@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-
+import javax.faces.bean.SessionScoped;
 import org.primefaces.event.SelectEvent;
 
 import com.gdunivo.es.exception.RecursoEliminadoException;
@@ -15,7 +14,7 @@ import com.gdunivo.es.repository.MateriasRepository;
 import com.gdunivo.es.repository.RepositoryFactory;
 
 @ManagedBean(name = "materias")
-@ViewScoped
+@SessionScoped
 public class MateriasBean implements Serializable {
 	private Materias materia = new Materias();
 	private Materias materiaSelec = new Materias();

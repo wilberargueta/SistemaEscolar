@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 
 import org.primefaces.event.SelectEvent;
 
@@ -17,7 +17,7 @@ import com.gdunivo.es.repository.ResponsableRepository;
 import com.gdunivo.es.repository.RolResponsableRepository;
 
 @ManagedBean(name = "responsables")
-@ViewScoped
+@SessionScoped
 public class ResponsablesBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;

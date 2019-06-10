@@ -2,15 +2,15 @@ package com.gdunivo.es.bean;
 
 import java.io.Serializable;
 
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 
 import com.gdunivo.es.model.Generales;
 import com.gdunivo.es.repository.GeneralesRepository;
 import com.gdunivo.es.repository.RepositoryFactory;
 
 @ManagedBean(name = "generalesBean", eager = true)
-@SessionScoped
+@ApplicationScoped
 public class GeneralesBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Generales generales = new Generales();

@@ -1,0 +1,164 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+
+	<ui:define name="content">
+		<h:form id="topbar">
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						value="Nueva Materia" onclick="PF('dlgForm').show();"
+						update=":form" actionListener="#{clases.limpiar}" />
+
+					<p:commandButton
+						style="margin-left:1em;background-color: #007bff;background: #007bff;"
+						value="Actualizar" rendered="#{clases.claseS}"
+						onclick="PF('dlgForm').show();" update=":form" />
+
+					<p:commandButton
+						style="margin-left:1em;background-color: #f44b42;background: #f44b42;"
+						value="Eliminar" rendered="#{clases.claseS}">
+						<p:confirm header="Eliminando Clase"
+							message="Esta seguro de eliminar el registro?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+
+					<p:commandButton
+						style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
+						value="Cancelar" action="#{clases.limpiar}"
+						rendered="#{clases.claseS}" update="topbar" />
+				</f:facet>
+			</p:toolbar>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton
+					style="margin-left:1em;background-color: #f44b42;background: #f44b42;"
+					value="Si" action="#{clases.eliminar}" update="topbar, :tblClases" />
+				<p:commandButton
+					style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
+					value="No" type="button" styleClass="ui-confirmdialog-no" />
+			</p:confirmDialog>
+		</h:form>
+		<p:dialog header="Formulario para agregar clase" widgetVar="dlgForm"
+			modal="true" style="font-size:17px;" width="700" resizable="false"
+			closable="false" closeOnEscape="true">
+			<h:form id="form">
+				<p:panelGrid columns="1" layout="grid">
+					<h:panelGrid columns="4">
+						<p:outputLabel value="Materia:" />
+						<p:autoComplete size="15"
+							completeMethod="#{clases.busquedaMateria}" id="txtMateria"
+							value="#{clases.clase.materia}" var="mate"
+							itemLabel="#{mate.materia}" itemValue="#{mate}"
+							converter="materiaConver" />
+
+						<p:outputLabel value="Docente:" />
+						<p:autoComplete size="15"
+							completeMethod="#{clases.busquedaPersonal}" id="txtDocente"
+							value="#{clases.clase.personal}" var="perso"
+							itemLabel="#{perso.nombre.concat(' ').concat(perso.apellido)}"
+							converter="personalConver" itemValue="#{perso.codPersonal}">
+
+							<p:column>
+								<p:outputLabel value="#{perso.nombre}" />
+							</p:column>
+							<p:column>
+								<p:outputLabel value="#{perso.apellido}" />
+							</p:column>
+						</p:autoComplete>
+
+
+						<p:outputLabel value="Hora Desde:" />
+						<p:calendar size="5" id="time1" value="#{clases.hora1}"
+							pattern="HH:mm" timeOnly="true" />
+						<p:outputLabel value="Hasta:" />
+						<p:calendar size="5" id="time2" value="#{clases.hora2}"
+							pattern="HH:mm" timeOnly="true" />
+
+						<p:outputLabel value="Seccion:" />
+						<p:selectOneMenu value="#{clases.clase.seccion}" required="true">
+							<f:selectItem itemLabel="Seleccione"></f:selectItem>
+							<f:selectItem itemLabel="A" itemValue="A"></f:selectItem>
+							<f:selectItem itemLabel="B" itemValue="B"></f:selectItem>
+							<f:selectItem itemLabel="C" itemValue="C"></f:selectItem>
+							<f:selectItem itemLabel="D" itemValue="D"></f:selectItem>
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Turno:" />
+						<p:selectOneMenu value="#{clases.clase.turno}" required="true">
+							<f:selectItem itemLabel="Seleccione "></f:selectItem>
+							<f:selectItem itemLabel="Matutino" itemValue="Matutino"></f:selectItem>
+							<f:selectItem itemLabel="Vespertino" itemValue="Vespertino"></f:selectItem>
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Dias:" />
+						<p:selectManyCheckbox id="txtDias" value="#{clases.dias}">
+
+							<f:selectItem itemLabel="Lunes" itemValue="Lu" />
+							<f:selectItem itemLabel="Martes" itemValue="Ma" />
+							<f:selectItem itemLabel="Miercoles" itemValue="Mi" />
+							<f:selectItem itemLabel="Jueves" itemValue="Ju" />
+							<f:selectItem itemLabel="Viernes" itemValue="Vi" />
+
+						</p:selectManyCheckbox>
+					</h:panelGrid>
+				</p:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						value="Guardar" action="#{clases.guardar}"
+						update=" :tblClases, topbar" onclick="PF('dlgForm').close();"
+						rendered="#{!clases.claseS}" />
+
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						value="Actualizar" update=" :tblClases, topbar"
+						rendered="#{clases.claseS}" onclick="PF('dlgForm').close();"
+						action="#{clases.actualizar}" />
+
+					<p:commandButton
+						style="background-color:#6c757d;background:#6c757d;"
+						value="Cancelar" onclick="PF('dlgForm').close();" />
+
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+		<h:form id="tblClases">
+			<p:dataTable var="clase" value="#{clases.clases}" rows="8"
+				paginator="true" selectionMode="single" selection="#{clases.clase}"
+				rowKey="#{clase.idClase}">
+				<f:facet name="header">Listado de Clases</f:facet>
+				<p:ajax event="rowSelect" update=":form, topbar"
+					listener="#{clases.seleccionarClase}"></p:ajax>
+				<p:column headerText="Materia">
+					<h:outputText value="#{clase.materia.materia}" />
+				</p:column>
+
+				<p:column headerText="Dias">
+					<h:outputText value="#{clase.dia}" />
+				</p:column>
+
+				<p:column headerText="Hora">
+					<h:outputText value="#{clase.hora}" />
+				</p:column>
+
+				<p:column headerText="Seccion">
+					<h:outputText value="#{clase.seccion}" />
+				</p:column>
+				<p:column headerText="Turno">
+					<h:outputText value="#{clase.turno}" />
+				</p:column>
+				<p:column headerText="Docente">
+					<p:outputLabel value="#{clase.personal.nombre} " />
+					<p:outputLabel value="#{clase.personal.apellido} " />
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
