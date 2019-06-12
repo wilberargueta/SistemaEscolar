@@ -1,0 +1,111 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+
+	<ui:define name="content">
+		<h:form id="topbar" rendered="#{reporte.tipo}">
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						value="Notas" actionListener="#{reporte.actualizar}"
+						update=":formD" onclick="PF('dlgForm').show();"
+						rendered="#{reporte.selecionado}">
+						<p:ajax update=":formD" listener="#{reporte.actualizar}"></p:ajax>
+					</p:commandButton>
+				</f:facet>
+			</p:toolbar>
+
+		</h:form>
+		<p:panelGrid columns="1" rendered="#{!reporte.tipo}">
+			<h:panelGrid columns="2">
+				<f:facet name="header">
+					<p:graphicImage height="155" width="250"
+						name="demo/images/perfil-alumno.png" />
+				</f:facet>
+				<h:outputText value="Codigo" />
+				<h:outputText value="#{reporte.a.codAlumno}" />
+
+				<h:outputText value="Nombre:" />
+				<h:outputText value="#{reporte.a.nombre}" />
+
+				<h:outputText value="Apelldio" />
+				<h:outputText value="#{reporte.a.apellido}" />
+			</h:panelGrid>
+			<h:panelGrid columns="1">
+				<p:dataTable id="Alumnos" var="clase" value="#{reporte.listaAC}"
+					rows="8" rowKey="#{clase.idAlumnoClase}">
+					<f:facet name="header">Listado Materias</f:facet>
+
+					<p:column headerText="Materia">
+						<h:outputText value="#{clase.clase.materia.materia}" />
+					</p:column>
+					<p:column headerText="Primer Periodo">
+						<h:outputText value="#{clase.notaPP}" />
+					</p:column>
+					<p:column headerText="Segundo Periodo">
+						<h:outputText value="#{clase.notaSP}" />
+					</p:column>
+					<p:column headerText="Tercer Periodo">
+						<h:outputText value="#{clase.notaTP}" />
+					</p:column>
+					<p:column headerText="Nota Final">
+						<h:outputText value="#{clase.notaFinal}" />
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+		</p:panelGrid>
+		<h:form id="repre" rendered="#{reporte.tipo}">
+			<p:dataTable id="Alumno" var="alumno" value="#{reporte.listaA}"
+				rows="8" paginator="true" selectionMode="single"
+				selection="#{reporte.ar}" rowKey="#{alumno.alumno.codAlumno}">
+				<f:facet name="header">Listado Representados</f:facet>
+				<p:ajax event="rowSelect" listener="#{reporte.seleccionarAlumno}"
+					update=":topbar"></p:ajax>
+				<p:column headerText="Nombre">
+					<h:outputText value="#{alumno.alumno.nombre}" />
+				</p:column>
+				<p:column headerText="Apellido">
+					<h:outputText value="#{alumno.alumno.apellido}" />
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+		<p:dialog header="Notas" widgetVar="dlgForm" modal="true"
+			style="font-size:17px;" width="700" resizable="false"
+			closeOnEscape="true">
+			<h:form id="formD">
+				<p:dataTable id="Alumnosss" var="clase" value="#{reporte.listaAC}"
+					rows="8" rowKey="#{clase.idAlumnoClase}">
+					<f:facet name="header">Listado Materias</f:facet>
+
+					<p:column headerText="Materia">
+						<h:outputText value="#{clase.clase.materia.materia}" />
+					</p:column>
+					<p:column headerText="Primer Periodo">
+						<h:outputText value="#{clase.notaPP}" />
+					</p:column>
+					<p:column headerText="Segundo Periodo">
+						<h:outputText value="#{clase.notaSP}" />
+					</p:column>
+					<p:column headerText="Tercer Periodo">
+						<h:outputText value="#{clase.notaTP}" />
+					</p:column>
+					<p:column headerText="Nota Final">
+						<h:outputText value="#{clase.notaFinal}" />
+					</p:column>
+				</p:dataTable>
+
+				<h:panelGrid columns="1">
+					<p:commandButton
+						style="background-color: #28a745;background: #28a745;"
+						value="Cerrar" onclick="PF('dlgForm').close();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

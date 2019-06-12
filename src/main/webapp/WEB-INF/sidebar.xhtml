@@ -8,12 +8,20 @@
 	<h:form>
 		<p:menu>
 			<p:submenu label="Menu">
-				<p:menuitem value="Alumnos" action="alumnos" />
-				<p:menuitem value="Materias" action="materias" />
-				<p:menuitem value="Responsables" action="responsables" />
-				<p:menuitem value="Clases" action="clases" />
-				<p:menuitem value="Personal" action="personal" />
-				<p:menuitem value="Salir" action="index" />
+				<p:menuitem value="Alumnos" action="alumnos"
+					rendered="#{login.rol == 'admin'}" />
+				<p:menuitem value="Materias" action="materias"
+					rendered="#{login.rol == 'admin'}" />
+				<p:menuitem value="Responsables" action="responsables"
+					rendered="#{login.rol == 'admin'}" />
+				<p:menuitem value="Clases" action="clases"
+					rendered="#{login.rol == 'admin'}" />
+				<p:menuitem value="Personal" action="personal"
+					rendered="#{login.rol == 'admin'}" />
+					<p:menuitem value="Notas" action="reporte"
+					rendered="#{login.rol == 'alum' ||login.rol == 'repre' }" />
+				<p:menuitem value="Salir" action="#{login.salir}"
+					 />
 			</p:submenu>
 		</p:menu>
 	</h:form>

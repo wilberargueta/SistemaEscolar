@@ -1,30 +1,58 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui" 
-	template="/WEB-INF/template.xhtml">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" lang="es">
 
+<h:head>
 
-	<ui:define name="content">
-		<h:form>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	</f:facet>
+	<title>Sistema Escolar</title>
+	<h:outputStylesheet library="css" name="style.css" />
+</h:head>
+
+<h:body>
+	<h:form>
+	
+		<p:panelGrid columns="1">
 			<h:panelGrid id="grid" cellpadding="5" columns="2"
 				style="margin-bottom:10px">
+			
 				<f:facet name="header">
+					<p:outputLabel style="color:red;display:block;" id="msg" value="#{login.msg}"/>
 					<h:outputLabel value="Inicio de Sesion" />
 				</f:facet>
 
 				<p:outputLabel for="codigo" value="Codigo" />
-				<p:inputText id="codigo" />
+				<p:inputText id="codigo" value="#{login.user}" />
 				
+				<p:outputLabel value="Rol"/>
+				<p:selectOneMenu value="#{login.rol}" required="true">
+					<f:selectItem itemLabel="Seleccione Rol"></f:selectItem>
+					<f:selectItem itemLabel="Administrador" itemValue="admin"></f:selectItem>
+					<f:selectItem itemLabel="Personal" itemValue="perso"></f:selectItem>
+					<f:selectItem itemLabel="Representante" itemValue="repre"></f:selectItem>
+					<f:selectItem itemLabel="Alumno" itemValue="alum"></f:selectItem>
+				</p:selectOneMenu>
+
 				<p:outputLabel for="pass" value="Contraseña" />
-				<p:password id="pass"/>
+				<p:password id="pass" value="#{login.pass}" />
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" cellpadding="5">
-				<p:commandButton styleClass="button-blue" value="Iniciar"  action="home"/>
-				<p:commandButton styleClass="button-red" value="Cancelar" action="logout"/>
+
+				<p:commandButton
+					style="margin-left:15em;background-color: #28a745;background: #28a745;"
+					value="Iniciar" action="#{login.ingresar}" update="msg"/>
+
 			</h:panelGrid>
-		</h:form>
-	</ui:define>
-</ui:composition>
+		</p:panelGrid>
+	</h:form>
+</h:body>
+
+</html>
