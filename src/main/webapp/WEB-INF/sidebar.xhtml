@@ -18,10 +18,11 @@
 					rendered="#{login.rol == 'admin'}" />
 				<p:menuitem value="Personal" action="personal"
 					rendered="#{login.rol == 'admin'}" />
-					<p:menuitem value="Notas" action="reporte"
+				<p:menuitem value="Materias" action="idocente"
+					rendered="#{login.rol == 'perso'}" />
+				<p:menuitem value="Notas" action="reporte"
 					rendered="#{login.rol == 'alum' ||login.rol == 'repre' }" />
-				<p:menuitem value="Salir" action="#{login.salir}"
-					 />
+				<p:menuitem value="Salir" action="#{login.salir}" />
 			</p:submenu>
 		</p:menu>
 	</h:form>

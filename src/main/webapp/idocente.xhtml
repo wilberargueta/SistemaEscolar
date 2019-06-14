@@ -1,0 +1,49 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+
+	<ui:define name="content">
+
+		<h:form id="topbar">
+			<p:toolbar>
+				<f:facet name="left">
+					
+					<p:commandButton
+						style="margin-left:1em;background-color: #28a745;background: #28a745;"
+						value="Ver Materia" action="malumno" rendered="#{docente.claseSeleccionada}" />
+					<p:commandButton
+						style="margin-left:1em;background-color: #f44b42;background: #f44b42;"
+						rendered="#{alumnos.claseSeleccionada}" value="Eliminar">
+						<p:confirm header="Eliminando Materia"
+							message="Esta seguro de eliminar el registro?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+
+				</f:facet>
+			</p:toolbar>
+		</h:form>
+		<h:form id="formMaterias">
+			<p:dataTable id="tblMaterias" value="#{docente.clases}" var="c"
+				rows="8" paginator="true" selectionMode="single"
+				selection="#{docente.clase}" rowKey="#{c.idClase}">
+				<f:facet name="header">Lista de Materias</f:facet>
+				<p:ajax event="rowSelect" listener="#{docente.seleccionarClase}"
+					update=":topbar"></p:ajax>
+					<p:column headerText="Materia">
+						<h:outputLabel value="#{c.materia.materia}"/>
+					</p:column>
+					<p:column headerText="Horario">
+						<h:outputLabel value="#{c.hora}"/>
+					</p:column>
+					<p:column headerText="Seccion">
+						<h:outputLabel value="#{c.seccion}"/>
+					</p:column>
+					
+
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,101 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+
+	<ui:define name="content">
+		<h:form id="topbar">
+			<p:toolbar>
+				<f:facet name="left">
+
+					<p:commandButton
+						style="background-color:#6c757d;background:#6c757d;"
+						value="Regresar" action="idocente" />
+					<p:commandButton
+						style="margin-left:1em;background-color: #007bff;background: #007bff;"
+						rendered="#{docente.alumnoClaseSeleccionada}"
+						value="Modificar Notas" onclick="PF('dlgForm').show();"
+						update=":form1" />
+
+
+				</f:facet>
+			</p:toolbar>
+		</h:form>
+		<h:form id="formAlumnos">
+			<p:dataTable id="tblAlumnos" value="#{docente.alumnoClases}" var="ac"
+				rows="8" paginator="true" selectionMode="single"
+				selection="#{docente.aClase}" rowKey="#{ac.idAlumnoClase}">
+				<f:facet name="header">Lista de Alumnos</f:facet>
+				<p:ajax event="rowSelect"
+					listener="#{docente.seleccionarAlumnoClase}" update=":topbar"></p:ajax>
+				<p:column headerText="Nombre">
+					<h:outputLabel value="#{ac.alumno.nombre}" />
+				</p:column>
+				<p:column headerText="Apellido">
+					<h:outputLabel value="#{ac.alumno.apellido}" />
+				</p:column>
+				<p:column headerText="Primer Periodo">
+					<h:outputLabel value="#{ac.notaPP}" />
+				</p:column>
+				<p:column headerText="Segundo Periodo">
+					<h:outputLabel value="#{ac.notaSP}" />
+				</p:column>
+				<p:column headerText="Tercer Periodo">
+					<h:outputLabel value="#{ac.notaTP}" />
+				</p:column>
+				<p:column headerText="Nota Final">
+					<h:outputLabel value="#{ac.notaFinal}" />
+				</p:column>
+
+
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog header="Formulario para modificar notas" widgetVar="dlgForm"
+			modal="true" style="font-size:17px;" width="700" resizable="false"
+			closable="false" closeOnEscape="true">
+
+			<h:form id="form1">
+				<p:panelGrid columns="1" layout="grid">
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Codigo Usuario:" />
+						<p:outputLabel value="#{docente.aClase.alumno.codAlumno}" />
+					</h:panelGrid>
+					<h:panelGrid columns="4">
+						<p:outputLabel value="Nombre: " />
+						<p:outputLabel value="#{docente.aClase.alumno.nombre}" />
+
+						<p:outputLabel value="Apellido: " />
+						<p:outputLabel value="#{docente.aClase.alumno.apellido}" />
+
+						<p:outputLabel value="Materia: " />
+						<p:outputLabel value="#{docente.aClase.clase.materia.materia}" />
+
+						<p:outputLabel value="Seccion: " />
+						<p:outputLabel value="#{docente.aClase.clase.seccion}" />
+					</h:panelGrid>
+					<h:panelGrid columns="6">
+						<p:outputLabel value="Primer periodo" />
+						<p:inputText size="8" value="#{docente.aClase.notaPP}" />
+						<p:outputLabel value="Segundo periodo" />
+						<p:inputText size="8" value="#{docente.aClase.notaSP}" />
+						<p:outputLabel value="Tercer Peridod" />
+						<p:inputText size="8" value="#{docente.aClase.notaTP}" />
+					</h:panelGrid>
+					<h:panelGrid columns="6">
+						<p:commandButton value="Modificar"
+							style="margin-left:1em;background-color: #007bff;background: #007bff;"
+							action="#{docente.modificarNotas}"
+							onclick="PF('dlgForm').close();" />
+						<p:commandButton value="Cancelar"
+							style="background-color:#6c757d;background:#6c757d;"
+							action="#{docente.limpiarAlumnoClase}"
+							onclick="PF('dlgForm').close();" />
+					</h:panelGrid>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
