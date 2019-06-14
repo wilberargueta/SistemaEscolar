@@ -29,6 +29,11 @@
 						rendered="#{personal.seleccionado}" value="Cancelar"
 						update=":form1, topbar"
 						actionListener="#{personal.limpiarFormulario}" />
+					<p:commandButton
+						style="margin-left:1em;background-color: #007bff;background: #007bff;"
+						rendered="#{personal.seleccionado}"
+						action="#{personal.verMaterias}" value="Ver Materias"
+						onclick="PF('dlgForm2').show();" />
 
 				</f:facet>
 			</p:toolbar>
@@ -157,5 +162,30 @@
 				</p:column>
 			</p:dataTable>
 		</h:form>
+
+		<p:dialog header="Formulario para registrar personal"
+			widgetVar="dlgForm2" modal="true" style="font-size:17px;" width="700"
+			resizable="false" closable="false" closeOnEscape="true">
+
+			<h:form id="form4">
+				<p:dataTable value="#{personal.listaMaterias}" var="m">
+					<f:facet name="header">Lista de Materias</f:facet>
+					<p:column headerText="Materia">
+						<p:outputLabel value="#{m.materia.materia}" />
+					</p:column>
+					<p:column headerText="Horario">
+						<p:outputLabel value="#{m.hora}" />
+					</p:column>
+					<p:column headerText="Dias">
+						<p:outputLabel value="#{m.dia}" />
+					</p:column>
+				</p:dataTable>
+				<h:panelGrid columns="1">
+					<p:commandButton
+						style="background-color:#6c757d;background:#6c757d;"
+						value="Cerrar" onclick="PF('dlgForm2').close();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
 	</ui:define>
 </ui:composition>

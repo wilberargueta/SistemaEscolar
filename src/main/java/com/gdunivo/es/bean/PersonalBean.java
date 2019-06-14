@@ -12,9 +12,11 @@ import javax.faces.bean.SessionScoped;
 
 import org.primefaces.event.SelectEvent;
 
+import com.gdunivo.es.model.Clases;
 import com.gdunivo.es.model.Personal;
 import com.gdunivo.es.model.RolPersonal;
 import com.gdunivo.es.model.Roles;
+import com.gdunivo.es.repository.ClasesRepository;
 import com.gdunivo.es.repository.PersonalRepository;
 import com.gdunivo.es.repository.RepositoryFactory;
 import com.gdunivo.es.repository.RolPersonalRepository;
@@ -28,6 +30,7 @@ public class PersonalBean implements Serializable {
 	private Personal personal = new Personal();
 	private Date fecha;
 	private List<Personal> listaPersonal = new ArrayList<>();
+	private List<Clases> listaMaterias = new ArrayList<>();
 	private boolean seleccionado = false;
 	private RolPersonal rPersonal = new RolPersonal();
 	private Roles admin = new Roles(1, "Admin");
@@ -35,6 +38,7 @@ public class PersonalBean implements Serializable {
 
 	private PersonalRepository pPersonal = (PersonalRepository) RepositoryFactory.getRepository("Personal");
 	private RolPersonalRepository pRPersonal = (RolPersonalRepository) RepositoryFactory.getRepository("RolPersonal");
+	private ClasesRepository pClase = (ClasesRepository) RepositoryFactory.getRepository("Clases");
 
 	public PersonalBean() {
 		this.actualizarTabla();
@@ -88,13 +92,20 @@ public class PersonalBean implements Serializable {
 		this.perso = perso;
 	}
 
-
 	public Date getFecha() {
 		return fecha;
 	}
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
+	}
+
+	public List<Clases> getListaMaterias() {
+		return listaMaterias;
+	}
+
+	public void setListaMaterias(List<Clases> listaMaterias) {
+		this.listaMaterias = listaMaterias;
 	}
 
 	public LocalDate convertDate(Date e) {
@@ -147,5 +158,10 @@ public class PersonalBean implements Serializable {
 		this.limpiarFormulario();
 		this.actualizarTabla();
 	}
+
+	public void verMaterias() {
+		this.listaMaterias = this.pClase.listadoClasesPorPersonal(personal);
+	}
+
 
 }
