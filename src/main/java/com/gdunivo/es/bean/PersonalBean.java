@@ -10,7 +10,6 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-
 import org.primefaces.event.SelectEvent;
 
 import com.gdunivo.es.model.Personal;
@@ -27,12 +26,10 @@ public class PersonalBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Personal personal = new Personal();
-	private Personal personalSelect = new Personal();
 	private Date fecha;
 	private List<Personal> listaPersonal = new ArrayList<>();
 	private boolean seleccionado = false;
 	private RolPersonal rPersonal = new RolPersonal();
-	private Roles rol = new Roles();
 	private Roles admin = new Roles(1, "Admin");
 	private Roles perso = new Roles(2, "Personal");
 
@@ -49,14 +46,6 @@ public class PersonalBean implements Serializable {
 
 	public void setPersonal(Personal personal) {
 		this.personal = personal;
-	}
-
-	public Personal getPersonalSelect() {
-		return personalSelect;
-	}
-
-	public void setPersonalSelect(Personal personalSelect) {
-		this.personalSelect = personalSelect;
 	}
 
 	public List<Personal> getListaPersonal() {
@@ -99,13 +88,6 @@ public class PersonalBean implements Serializable {
 		this.perso = perso;
 	}
 
-	public Roles getRol() {
-		return rol;
-	}
-
-	public void setRol(Roles rol) {
-		this.rol = rol;
-	}
 
 	public Date getFecha() {
 		return fecha;
@@ -125,12 +107,9 @@ public class PersonalBean implements Serializable {
 	}
 
 	public void registrar() {
-		System.out.println("Entro");
 		this.personal.setFechaNacimiento(convertDate(this.fecha));
 		this.personal = this.pPersonal.guardar(this.personal);
-		System.out.println(this.personal);
 		this.rPersonal.setPersonal(this.personal);
-		this.rPersonal.setRol(this.rol);
 		this.pRPersonal.guardar(this.rPersonal);
 		this.limpiarFormulario();
 		this.actualizarTabla();
@@ -148,19 +127,15 @@ public class PersonalBean implements Serializable {
 	}
 
 	public void seleccionarPersonal(SelectEvent event) {
-
-		this.personalSelect = (Personal) event.getObject();
-		this.personal = this.personalSelect;
+		this.personal = (Personal) event.getObject();
 		this.fecha = this.convertToDateViaInstant(this.personal.getFechaNacimiento());
 		this.seleccionado = true;
 	}
 
 	public void actualizarPersonal() {
-		System.out.println("Actualizar personal");
 		this.personal.setFechaNacimiento(convertDate(this.fecha));
 		this.personal = this.pPersonal.actualizar(this.personal);
 		this.rPersonal.setPersonal(this.personal);
-		this.rPersonal.setRol(this.rol);
 		this.pRPersonal.actualizar(this.rPersonal);
 		this.limpiarFormulario();
 		this.actualizarTabla();
@@ -168,7 +143,6 @@ public class PersonalBean implements Serializable {
 	}
 
 	public void eliminarPersonal() {
-
 		this.pPersonal.eliminar(this.personal);
 		this.limpiarFormulario();
 		this.actualizarTabla();

@@ -28,7 +28,7 @@
 						style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
 						rendered="#{personal.seleccionado}" value="Cancelar"
 						update=":form1, topbar"
-						action="#{personal.limpiarFormulario}" />
+						actionListener="#{personal.limpiarFormulario}" />
 
 				</f:facet>
 			</p:toolbar>
@@ -55,41 +55,40 @@
 					</h:panelGrid>
 					<h:panelGrid columns="4">
 						<p:outputLabel value="Nombre" />
-						<p:inputText id="txtNombre" value="#{personal.personal.nombre}"
-							required="true" />
+						<p:inputText size="15" id="txtNombre"
+							value="#{personal.personal.nombre}" required="true" />
 
 						<p:outputLabel value="Apellido" />
-						<p:inputText id="txtApellido"
+						<p:inputText size="15" id="txtApellido"
 							value="#{personal.personal.apellido}" required="true" />
 
 						<p:outputLabel value="Fecha Nacimiento:" />
 						<p:calendar size="6" id="txtFNacimiento" mask="true"
 							value="#{personal.fecha}" required="true" pattern="dd/MM/yyyy" />
 
-						<p:outputLabel value="DUI" />
-						<p:inputMask mask="99999999-9" id="txtDui"
+						<p:outputLabel value="DUI:" />
+						<p:inputMask size="15" mask="99999999-9"
 							value="#{personal.personal.DUI}" />
 
-						<p:outputLabel value="NIT" />
-						<p:inputMask mask="9999-999999-999-9" id="txtNit"
+						<p:outputLabel value="NIT:" />
+						<p:inputMask size="15" mask="9999-999999-999-9"
 							value="#{personal.personal.NIT}" />
 
-						<p:outputLabel value="Telefono" />
-						<p:inputMask mask="+(999)9999-9999" id="txtTelefono"
+						<p:outputLabel value="Telefono:" />
+						<p:inputMask size="15" mask="+(999)9999-9999"
 							value="#{personal.personal.telefono}" />
 
 						<p:outputLabel value="Contraseña" />
-						<p:password value="#{personal.rPersonal.contraseña}"
-							required="true" />
+						<p:password size="15" value="#{personal.rPersonal.contraseña}"
+							required="true"></p:password>
 
-						<p:outputLabel value="Tipo de Rol" />
+						<p:outputLabel value="Seleccione rol" />
 						<p:selectOneMenu value="#{personal.rPersonal.rol}" required="true">
-							<f:selectItem itemLabel="Seleccione Rol"></f:selectItem>
+							<f:selectItem itemLabel="Seleccione..."></f:selectItem>
 							<f:selectItem itemLabel="Administrador"
 								itemValue="#{personal.admin}"></f:selectItem>
 							<f:selectItem itemLabel="Personal" itemValue="#{personal.perso}"></f:selectItem>
 						</p:selectOneMenu>
-
 					</h:panelGrid>
 					<h:panelGrid columns="3">
 						<p:outputLabel value="Direccion" />
@@ -102,7 +101,7 @@
 					<p:commandButton
 						style="background-color: #28a745;background: #28a745;"
 						id="btnGuardar" value="Guardar"
-						action="#{personal.registrar}"
+						actionListener="#{personal.registrar}"
 						rendered="#{!personal.seleccionado}" update=":tblPersonal,@form"
 						onclick="PF('dlgForm').close();" />
 
@@ -110,7 +109,7 @@
 					<p:commandButton
 						style="background-color: #28a745;background: #28a745;"
 						rendered="#{personal.seleccionado}" value="Actualizar"
-						action="#{personal.actualizarPersonal}"
+						actionListener="#{personal.actualizarPersonal}"
 						update=":tblPersonal,@form" onclick="PF('dlgForm').close();" />
 
 
@@ -124,41 +123,39 @@
 			</h:form>
 		</p:dialog>
 		<h:form id="tblPersonal">
-			<p:dataTable var="person" value="#{personal.listaPersonal}" rows="8"
+			<p:dataTable var="p" value="#{personal.listaPersonal}" rows="8"
 				paginator="true" selectionMode="single"
-				selection="#{personal.personal}" rowKey="#{person.codPersonal}">
+				selection="#{personal.personal}" rowKey="#{p.codPersonal}">
 				<f:facet name="header">Listado de Personal</f:facet>
 				<p:ajax event="rowSelect" listener="#{personal.seleccionarPersonal}"
 					update=":form1,:topbar"></p:ajax>
 				<p:column headerText="Cod Personal">
-					<h:outputText value="#{person.codPersonal}" />
+					<h:outputText value="#{p.codPersonal}" />
 				</p:column>
 
 				<p:column headerText="Nombre">
-					<h:outputText value="#{person.nombre}" />
+					<h:outputText value="#{p.nombre}" />
 				</p:column>
 
 				<p:column headerText="Apellido">
-					<h:outputText value="#{person.apellido}" />
+					<h:outputText value="#{p.apellido}" />
 				</p:column>
-
 				<p:column headerText="Fecha Nacimiento">
-					<h:outputText value="#{person.fechaNacimiento}" />
-				</p:column>
-				<p:column headerText="Telefono">
-					<p:outputLabel value="#{person.telefono}" />
+					<h:outputText value="#{p.fechaNacimiento}" />
 				</p:column>
 				<p:column headerText="DUI">
-					<p:outputLabel value="#{person.DUI}" />
+					<h:outputLabel value="#{p.DUI}" />
 				</p:column>
 				<p:column headerText="NIT">
-					<p:outputLabel value="#{person.NIT}" />
+					<h:outputLabel value="#{p.NIT}" />
+				</p:column>
+				<p:column headerText="Telefono">
+					<h:outputLabel value="#{p.telefono}" />
 				</p:column>
 				<p:column headerText="Direccion">
-					<h:outputText value="#{person.direccion}" />
+					<h:outputText value="#{p.direccion}" />
 				</p:column>
 			</p:dataTable>
 		</h:form>
-
 	</ui:define>
 </ui:composition>

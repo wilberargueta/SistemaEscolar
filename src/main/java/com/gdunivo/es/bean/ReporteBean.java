@@ -1,5 +1,6 @@
 package com.gdunivo.es.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
@@ -18,8 +19,11 @@ import com.gdunivo.es.repository.RepositoryFactory;
 
 @ManagedBean(name = "reporte")
 @SessionScoped
-public class ReporteBean {
+public class ReporteBean implements Serializable{
 
+
+	private static final long serialVersionUID = 1647791952526265913L;
+	
 	private List<AlumnoResponsable> listaA;
 	private Alumnos a = new Alumnos();
 	private AlumnoResponsableRepository pAResponsable = (AlumnoResponsableRepository) RepositoryFactory

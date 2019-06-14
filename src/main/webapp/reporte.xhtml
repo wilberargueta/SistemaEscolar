@@ -11,11 +11,9 @@
 				<f:facet name="left">
 					<p:commandButton
 						style="background-color: #28a745;background: #28a745;"
-						value="Notas" actionListener="#{reporte.actualizar}"
+						value="Notas" action="#{reporte.actualizar}"
 						update=":formD" onclick="PF('dlgForm').show();"
-						rendered="#{reporte.selecionado}">
-						<p:ajax update=":formD" listener="#{reporte.actualizar}"></p:ajax>
-					</p:commandButton>
+						rendered="#{reporte.selecionado}"/>
 				</f:facet>
 			</p:toolbar>
 

@@ -1,5 +1,7 @@
 package com.gdunivo.es.bean;
 
+import java.io.Serializable;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -19,7 +21,9 @@ import com.gdunivo.es.repository.RolResponsableRepository;
 
 @ManagedBean(name = "login")
 @SessionScoped
-public class LoginBean {
+public class LoginBean implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private String rol;
 	private String user;
@@ -85,7 +89,7 @@ public class LoginBean {
 					HttpSession session = SessionUtils.getSession();
 					session.setAttribute("user", user);
 					session.setAttribute("rol", rol);
-				
+
 					return "home.xhtml";
 				} else {
 					this.msg = "Usuario o contraseña incorrectos";
@@ -138,7 +142,7 @@ public class LoginBean {
 					HttpSession session = SessionUtils.getSession();
 					session.setAttribute("user", user);
 					session.setAttribute("rol", rol);
-					
+
 					return "home.xhtml";
 				} else {
 					this.msg = "Usuario o contraseña incorrectos";
