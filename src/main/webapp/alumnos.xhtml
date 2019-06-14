@@ -26,8 +26,12 @@
 					</p:commandButton>
 					<p:commandButton
 						style="margin-left:1em;background-color:#5bc0de;background:#5bc0de;"
-						rendered="#{alumnos.seleccionado}" value="Inscripcion" action="#{alumnos.actualizarClases}"
-						 />
+						rendered="#{alumnos.seleccionado}" value="Inscripcion"
+						action="#{alumnos.actualizarClases}" />
+					<p:commandButton
+						style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
+						rendered="#{alumnos.seleccionado}" value="Agregar representante"
+						 onclick="PF('dlgForm3').show();" />
 					<p:commandButton
 						style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
 						rendered="#{alumnos.seleccionado}" value="Cancelar"
@@ -75,8 +79,8 @@
 							<f:selectItem itemLabel="Masculino" itemValue="M"></f:selectItem>
 							<f:selectItem itemLabel="Femenino" itemValue="F"></f:selectItem>
 						</p:selectOneMenu>
-						
-						<p:outputLabel value="Contraseña"/>
+
+						<p:outputLabel value="Contraseña" />
 						<p:password value="#{alumnos.rAlumno.contraseña}" required="true"></p:password>
 					</h:panelGrid>
 					<h:panelGrid columns="3">
@@ -144,6 +148,31 @@
 				</p:column>
 			</p:dataTable>
 		</h:form>
+		<p:dialog header="Formulario para agregar representante"
+			widgetVar="dlgForm3" modal="true" style="font-size:17px;" width="700"
+			resizable="false" closable="false" closeOnEscape="true">
+			<h:form id="formR">
+				<p:panelGrid columns="1">
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Representante" />
+						<p:autoComplete size="15"
+							completeMethod="#{alumnos.busquedaResponsable}" id="txtMateria"
+							value="#{alumnos.aRespon.responsable}" var="a"
+							itemLabel="#{a.nombre.concat(' ').concat(a.apellido)}"
+							itemValue="#{a.codResponsable}" converter="RepreConvert" />
+					</h:panelGrid>
+				</p:panelGrid>
 
+
+				<p:commandButton
+					style="background-color: #28a745;background: #28a745;"
+					value="Agregar" action="#{alumnos.agregarAR}"
+					onclick="PF('dlgForm3').close();" />
+				<p:commandButton
+					style="margin-left:1em;background-color:#6c757d;background:#6c757d;"
+					value="Cancel" onclick="PF('dlgForm3').close();" />
+
+			</h:form>
+		</p:dialog>
 	</ui:define>
 </ui:composition>

@@ -43,7 +43,7 @@ public class RepositoryFactory {
 		case "RolResponsable":
 			return new RolResponsableRepositoryImp();
 		default:
-			System.out.println("Repository no encontrado");
+			System.out.println("Repository no encontrado::" + name);
 			return null;
 		}
 

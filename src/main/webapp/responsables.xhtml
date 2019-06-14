@@ -29,6 +29,11 @@
 						rendered="#{responsables.seleccionado}" value="Cancelar"
 						update=":form1, topbar"
 						actionListener="#{responsables.limpiarFormulario}" />
+					<p:commandButton
+						style="margin-left:1em;background-color: #007bff;background: #007bff;"
+						rendered="#{responsables.seleccionado}"
+						action="#{responsables.verAlumnos}" value="Ver Representados"
+						onclick="PF('dlgForm2').show();" update=":tblAlumnoForm" />
 
 				</f:facet>
 			</p:toolbar>
@@ -139,6 +144,28 @@
 				</p:column>
 			</p:dataTable>
 		</h:form>
+		<p:dialog header="Lista de representados" widgetVar="dlgForm2"
+			modal="true" style="font-size:17px;" width="700" resizable="false"
+			closable="false" closeOnEscape="true">
+			<h:form id="tblAlumnoForm">
+				<p:dataTable id="tblAlumno"
+					value="#{responsables.listaAResponsable}" var="r">
+					<f:facet name="header">Lista de Alumnos</f:facet>
+					<p:column headerText="Nombre:">
+						<h:outputLabel value="#{r.alumno.nombre}" />
+					</p:column>
+					<p:column headerText="Apellido:">
+						<h:outputLabel value="#{r.alumno.apellido}" />
+					</p:column>
+				</p:dataTable>
+
+				<h:panelGrid columns="1">
+					<p:commandButton
+						style="background-color:#6c757d;background:#6c757d;"
+						value="Cerrar" onclick="PF('dlgForm2').close();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
 
 	</ui:define>
 </ui:composition>

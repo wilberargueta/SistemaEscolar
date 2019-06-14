@@ -14,16 +14,20 @@ import javax.faces.bean.SessionScoped;
 import org.primefaces.event.SelectEvent;
 
 import com.gdunivo.es.model.AlumnoClase;
+import com.gdunivo.es.model.AlumnoResponsable;
 import com.gdunivo.es.model.Alumnos;
 import com.gdunivo.es.model.Clases;
 import com.gdunivo.es.model.Materias;
+import com.gdunivo.es.model.Responsables;
 import com.gdunivo.es.model.RolAlumno;
 import com.gdunivo.es.model.Roles;
 import com.gdunivo.es.repository.AlumnoClaseRepository;
+import com.gdunivo.es.repository.AlumnoResponsableRepository;
 import com.gdunivo.es.repository.AlumnosRepository;
 import com.gdunivo.es.repository.ClasesRepository;
 import com.gdunivo.es.repository.MateriasRepository;
 import com.gdunivo.es.repository.RepositoryFactory;
+import com.gdunivo.es.repository.ResponsableRepository;
 import com.gdunivo.es.repository.RolAlumnoRepository;
 
 @ManagedBean(name = "alumnos")
@@ -38,6 +42,7 @@ public class AlumnosBean implements Serializable {
 	private AlumnoClaseRepository pAClase = (AlumnoClaseRepository) RepositoryFactory.getRepository("AlumnoClase");
 	private MateriasRepository pMaterias = (MateriasRepository) RepositoryFactory.getRepository("Materias");
 	private ClasesRepository pClases = (ClasesRepository) RepositoryFactory.getRepository("Clases");
+	private ResponsableRepository pRespon = (ResponsableRepository) RepositoryFactory.getRepository("Responsables");
 	private Date fecha;
 	private List<Alumnos> alumnos;
 	private List<Clases> listaClases;
@@ -48,6 +53,8 @@ public class AlumnosBean implements Serializable {
 	private AlumnoClase aClase = new AlumnoClase();
 	private Materias materia = new Materias();
 	private List<Clases> clasesSeleccionadas = new ArrayList<>();
+	private AlumnoResponsable aRespon =new  AlumnoResponsable();
+	private AlumnoResponsableRepository pAR = (AlumnoResponsableRepository)RepositoryFactory.getRepository("AlumnoResponsable");
 
 	private boolean claseSeleccionada = false;
 
@@ -66,6 +73,15 @@ public class AlumnosBean implements Serializable {
 
 	public Date getFecha() {
 		return fecha;
+	}
+	
+
+	public AlumnoResponsable getaRespon() {
+		return aRespon;
+	}
+
+	public void setaRespon(AlumnoResponsable aRespon) {
+		this.aRespon = aRespon;
 	}
 
 	public void setFecha(Date fecha) {
@@ -255,9 +271,19 @@ public class AlumnosBean implements Serializable {
 		this.listaClasesAlumno = this.pAClase.clasesPorAlumno(this.alumno);
 		this.limpiarClases();
 	}
+
 	public String regresar() {
 		this.limpiarFormulario();
 		return "alumnos";
 	}
 
+	public List<Responsables> busquedaResponsable(String query) {
+
+		return this.pRespon.buscarPorNombre(query);
+	}
+	public void agregarAR() {
+		this.aRespon.setAlumno(alumno);
+		this.pAR.guardar(aRespon);
+		
+	}
 }

@@ -9,9 +9,11 @@ import javax.faces.bean.SessionScoped;
 
 import org.primefaces.event.SelectEvent;
 
+import com.gdunivo.es.model.AlumnoResponsable;
 import com.gdunivo.es.model.Responsables;
 import com.gdunivo.es.model.RolResponsable;
 import com.gdunivo.es.model.Roles;
+import com.gdunivo.es.repository.AlumnoResponsableRepository;
 import com.gdunivo.es.repository.RepositoryFactory;
 import com.gdunivo.es.repository.ResponsableRepository;
 import com.gdunivo.es.repository.RolResponsableRepository;
@@ -24,10 +26,13 @@ public class ResponsablesBean implements Serializable {
 	private Responsables responsable = new Responsables();
 	private Responsables responsableSelec = new Responsables();
 	private List<Responsables> responsables = new ArrayList<>();
+	private List<AlumnoResponsable> listaAResponsable = new ArrayList<>();
 	private boolean seleccionado = false;
 	private ResponsableRepository persis = (ResponsableRepository) RepositoryFactory.getRepository("Responsables");
 	private RolResponsableRepository rResponsablePersis = (RolResponsableRepository) RepositoryFactory
 			.getRepository("RolResponsable");
+	private AlumnoResponsableRepository pARespon = (AlumnoResponsableRepository) RepositoryFactory
+			.getRepository("AlumnoResponsable");
 	private RolResponsable rResponsable = new RolResponsable();
 	private Roles rol = new Roles();
 
@@ -67,7 +72,6 @@ public class ResponsablesBean implements Serializable {
 	public void setSeleccionado(boolean seleccionado) {
 		this.seleccionado = seleccionado;
 	}
-	
 
 	public RolResponsable getrResponsable() {
 		return rResponsable;
@@ -75,6 +79,14 @@ public class ResponsablesBean implements Serializable {
 
 	public void setrResponsable(RolResponsable rResponsable) {
 		this.rResponsable = rResponsable;
+	}
+
+	public List<AlumnoResponsable> getListaAResponsable() {
+		return listaAResponsable;
+	}
+
+	public void setListaAResponsable(List<AlumnoResponsable> listaAResponsable) {
+		this.listaAResponsable = listaAResponsable;
 	}
 
 	public void registrar() {
@@ -120,6 +132,10 @@ public class ResponsablesBean implements Serializable {
 		this.persis.eliminar(this.responsable);
 		this.limpiarFormulario();
 		this.actualizarTabla();
+	}
+
+	public void verAlumnos() {
+		this.listaAResponsable = this.pARespon.listadoPorResponsable(responsable);
 	}
 
 }
